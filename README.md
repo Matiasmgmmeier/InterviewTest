@@ -1,2 +1,0 @@
-# InterviewTest
-Repositorio de entrevista
