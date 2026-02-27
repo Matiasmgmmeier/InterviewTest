@@ -1,5 +1,4 @@
 using CleanArchitecture.Application.DTOs;
-using CleanArchitecture.Domain.Entities;
 using CleanArchitecture.Domain.Interfaces;
 
 namespace CleanArchitecture.Application.Services;
@@ -7,30 +6,36 @@ namespace CleanArchitecture.Application.Services;
 public interface IUsuarioService
 {
     Task<IEnumerable<UsuarioDto>> GetAllUsuariosAsync();
+
     Task<UsuarioDto?> GetUsuarioByIdAsync(int id);
+
     Task<UsuarioDto?> GetUsuarioByEmailAsync(string email);
+
     Task<IEnumerable<UsuarioDto>> GetUsuariosActivosAsync();
+
     Task<UsuarioDto> CreateUsuarioAsync(CreateUsuarioDto createDto);
+
     Task UpdateUsuarioAsync(int id, UpdateUsuarioDto updateDto);
+
     Task DeleteUsuarioAsync(int id);
 }
 
 /// <summary>
 /// Servicio de aplicación para la gestión de Usuarios.
 /// Actúa como intermediario entre los Controladores y los Repositorios.
-/// 
+///
 /// RESPONSABILIDADES:
 /// 1. Recibir los DTOs desde el controlador.
 /// 2. Aplicar lógica de negocio (validaciones, transformaciones).
 /// 3. Llamar al repositorio correspondiente (_usuarioRepository).
 /// 4. Mapear las entidades del dominio (Usuario) a DTOs de respuesta (UsuarioDto).
 /// 5. Retornar el DTO mapeado al controlador.
-/// 
+///
 /// MAPEO REQUERIDO (Entidad → DTO):
 /// UsuarioDto {
 ///     Id, Nombre, Email, Telefono, FechaRegistro, Activo
 /// }
-/// 
+///
 /// NOTA: No exponer nunca la entidad de dominio directamente. Siempre usar DTOs.
 /// </summary>
 public class UsuarioService : IUsuarioService
@@ -48,7 +53,17 @@ public class UsuarioService : IUsuarioService
     /// </summary>
     public async Task<IEnumerable<UsuarioDto>> GetAllUsuariosAsync()
     {
-        throw new NotImplementedException("Implementar: obtener todos y mapear a UsuarioDto");
+        var result = await _usuarioRepository.GetAllAsync();
+        var dtolist = result.Select(x => new UsuarioDto
+        {
+            Id = x.Id,
+            Nombre = x.Nombre,
+            Email = x.Email,
+            Telefono = x.Telefono,
+            FechaRegistro = x.FechaRegistro,
+            Activo = x.Activo
+        });
+        return dtolist.ToList();
     }
 
     /// <summary>
@@ -81,7 +96,7 @@ public class UsuarioService : IUsuarioService
 
     /// <summary>
     /// Crea un nuevo usuario a partir del DTO recibido.
-    /// TAREA: 
+    /// TAREA:
     ///   1. Crear una nueva instancia de Usuario mapeando desde CreateUsuarioDto.
     ///   2. Asignar FechaRegistro = DateTime.Now.
     ///   3. Llamar a _usuarioRepository.AddAsync(usuario).

@@ -6,12 +6,12 @@ namespace CleanArchitecture.WebAPI.Controllers;
 
 /// <summary>
 /// Controlador REST para la gestión de Usuarios.
-/// 
+///
 /// RESPONSABILIDADES DEL CONTROLADOR:
 /// 1. Recibir las peticiones HTTP y extraer los parámetros (ruta, body, query).
 /// 2. Delegar toda la lógica al servicio (_usuarioService). NO poner lógica aquí.
 /// 3. Retornar la respuesta HTTP adecuada según el resultado.
-/// 
+///
 /// CÓDIGOS HTTP A USAR:
 /// - Ok(data)           → 200: Consulta exitosa con datos.
 /// - CreatedAtAction()  → 201: Recurso creado exitosamente.
@@ -38,7 +38,8 @@ public class UsuariosController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<IEnumerable<UsuarioDto>>> GetAll()
     {
-        throw new NotImplementedException("Implementar: llamar al servicio y retornar Ok con la lista de usuarios");
+        var result = await _usuarioService.GetAllUsuariosAsync();
+        return Ok(result);
     }
 
     /// <summary>

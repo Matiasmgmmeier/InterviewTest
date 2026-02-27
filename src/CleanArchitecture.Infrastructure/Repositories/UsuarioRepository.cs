@@ -9,10 +9,10 @@ namespace CleanArchitecture.Infrastructure.Repositories;
 /// Repositorio específico para la entidad Usuario.
 /// Hereda las operaciones CRUD del repositorio genérico Repository<Usuario>
 /// e implementa consultas adicionales propias de la entidad.
-/// 
+///
 /// IMPORTANTE: Al sobreescribir GetByIdAsync y GetAllAsync, incluir siempre
 /// el Include de la relación con Facturas para evitar referencias nulas.
-/// 
+///
 /// Usar Include() de Entity Framework para cargar relaciones (Eager Loading).
 /// Usar FirstOrDefaultAsync() para obtener un único registro.
 /// Usar Where() para filtrar registros.
@@ -56,6 +56,6 @@ public class UsuarioRepository : Repository<Usuario>, IUsuarioRepository
     /// </summary>
     public override async Task<IEnumerable<Usuario>> GetAllAsync()
     {
-        throw new NotImplementedException("Implementar: obtener todos los usuarios con Include de Facturas");
+        return await _dbSet.Include(u => u.Facturas).ToListAsync();
     }
 }
